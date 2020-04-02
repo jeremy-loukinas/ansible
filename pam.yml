@@ -11,7 +11,7 @@
       src: /etc/pam.d/password-auth
       dest: /etc/pam.d/password-auth.ansiblebkup    
 
-  - name: Create configuration files with your custom settings
+  - name: Break Authconfig
     copy:
       src: /etc/pam.d/system-auth
       dest: /etc/pam.d/system-auth-local
@@ -34,7 +34,7 @@
     lineinfile:
       path: /etc/pam.d/password-auth-local
       line: 'auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900'
-      insertbefore: 'auth [success=1 default=bad] pam_unix.so'
+      insertbefore: 'auth        [success=1 default=bad]    pam_unix.so'
 
   - name: Create symbolic links
     file:
