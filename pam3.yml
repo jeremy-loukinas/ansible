@@ -39,4 +39,10 @@
       src: /etc/pam.d/password-auth-local
       dest: /etc/pam.d/password-auth
       state: link
+      
+  - name: Restrict SU
+    lineinfile: 
+      path: /etc/pam.d/su
+      regexp: '^#auth		required	pam_wheel.so use_uid'
+      line: 'auth		required	pam_wheel.so use_uid'
 
