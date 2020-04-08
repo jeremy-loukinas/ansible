@@ -5,11 +5,11 @@
 
   - name: Make backup copies of files
     copy:
-      src: /etc/pam.d/system-auth-ac
-      dest: /etc/pam.d/system-auth.ansiblebkup
+      src: /etc/pam.d/system-auth
+      dest: /etc/pam.d/system-auth-local
     copy:
-      src: /etc/pam.d/password-auth-ac
-      dest: /etc/pam.d/password-auth.ansiblebkup
+      src: /etc/pam.d/password-auth
+      dest: /etc/pam.d/password-auth-local
 
   - name: Set System Auth PAM Entries
     lineinfile:
@@ -30,11 +30,11 @@
 
   - name: Create symbolic links
     file:
-      src: /etc/pam.d/system-auth-ac
+      src: /etc/pam.d/system-auth-local
       dest: /etc/pam.d/system-auth
       state: link
     file:
-      src: /etc/pam.d/password-auth-ac
+      src: /etc/pam.d/password-auth-local
       dest: /etc/pam.d/password-auth
       state: link
 
