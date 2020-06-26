@@ -1,0 +1,34 @@
+---
+
+ - hosts: all
+   gather_facts: true
+   become: yes
+   become_method: sudo
+   ignore_errors: yes
+   
+   tasks:
+   
+    - name: "Compliance Remediation for RHEL6"
+      include_role:
+        name: rhel6
+      when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6'
+      tags: rhel6
+
+    - name: "Compliance Remediation for RHEL7"
+      include_role:
+        name: rhel7
+      when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
+      tags: rhel7
+
+    - name: "Compliance Remediation for RHEL8"
+      include_role:
+        name: rhel8
+      when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8'
+      tags: rhel8
+
+    - name: "Compliance Remediation for AIX"
+      include_role:
+        name: aix
+      when: ansible_distribution == 'AIX' and ansible_distribution_major_version == '7'
+      tags: aix
+
