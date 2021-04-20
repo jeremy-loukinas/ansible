@@ -4,19 +4,26 @@
   gather_facts: false
   become: true
 
+  vars:
+    vg_lookup: "rootvg" # ignores case
 
   tasks:
 
-
-    - name: Stop Auditd
-      command: service auditd stop
+    - name: Stop AuditD
+      service:
+        name: auditd
+        state: stopped
 
     - name: Delete existing log files
-      command: rm -r -f /var/log/audit/*
+      command: rm -r -f /var/log/audit/*      
+    
+    - name: Determine VG name
+      command: "vgs | grep -i {{ vg_lookup }} | awk {'print $1'}"
+      register: vg_name_result
 
     - name: Create Audit Log Volume on rootvg
       community.general.lvol:
-        vg: {{vg}}
+        vg: "{{ vg_name_result.stdout_lines[0] }}"
         lv: auditvol
         size: 150
 
