@@ -1,0 +1,45 @@
+---
+
+- hosts: all
+  gather_facts: false
+  become: true
+
+
+  tasks:
+
+
+    - name: Stop Auditd
+      command: service auditd stop
+
+    - name: Delete existing log files
+      command: rm -r -f /var/log/audit/*
+
+    - name: Create Audit Log Volume on rootvg
+      community.general.lvol:
+        vg: rhel
+        lv: auditvol
+        size: 150
+
+    - name: Create filesystem
+      filesystem:
+        fstype: xfs
+        dev: /dev/mapper/rhel-auditvol
+
+    - name: Create fstab entry
+      lineinfile: 
+        dest: /etc/fstab
+        backup: yes
+        state: present
+        line: "/dev/mapper/rhel-auditvol   /var/log/audit                       xfs     defaults        0 0"
+
+    - name: Mount Audit Filesystem
+      mount:
+        path: /var/log/audit
+        src: /dev/mapper/rhel-auditvol
+        fstype: xfs
+        state: mounted
+
+    - name: Start AuditD
+      service:
+        name: auditd
+        state: started
