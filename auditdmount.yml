@@ -16,7 +16,7 @@
 
     - name: Create Audit Log Volume on rootvg
       community.general.lvol:
-        vg: rhel
+        vg: {{vg}}
         lv: auditvol
         size: 150
 
